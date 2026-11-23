@@ -1,3 +1,4 @@
+import { DeveloperLogo } from '../components/ClientLogo';
 import { completedProjectsData, getProjectImageUrl, type Project } from '../data/projectsData';
 
 interface ProjectsProps {
@@ -5,137 +6,90 @@ interface ProjectsProps {
   onViewAllProjects: () => void;
 }
 
-export function Projects({ onSelectProject, onViewAllProjects }: ProjectsProps) {
-  // Only show exactly three projects on the main page as requested
-  const displayedProjects = completedProjectsData.slice(0, 3);
+const FEATURED_PROJECTS = completedProjectsData.slice(0, 3);
+const FALLBACK_IMAGE = '/empire-group-project-2560x1440.jpg';
 
+function placeLabel(project: Project) {
+  const city = project.city.split(',')[0].trim();
+  return project.location.trim() === city ? city : `${project.location}, ${city}`;
+}
+
+export function Projects({ onSelectProject, onViewAllProjects }: ProjectsProps) {
   return (
-    <section className="projects-section" id="projects" aria-labelledby="projects-title">
-      <div className="container">
-        {/* Section Heading */}
-        <div className="projects-heading-row" data-reveal>
-          <div className="projects-heading-left">
-            <p className="eyebrow">Proven Track Record · Pune &amp; Beyond</p>
-            <h2 className="section-heading" id="projects-title">
+    <section className="ehome-projects" id="projects" aria-labelledby="projects-title">
+      <div className="ehome-projects__inner">
+        <header className="ehome-projects__head" data-reveal>
+          <div>
+            <p className="ehome-eyebrow">Proven Track Record · Pune &amp; Beyond</p>
+            <h2 className="ehome-heading" id="projects-title">
               Our Completed <em>Projects.</em>
             </h2>
-            <p className="section-copy">
-              A selected portfolio of landmark developments delivered with India’s leading real estate builders. Every structure is engineered for endurance, seismic resilience, and architectural distinction.
-            </p>
           </div>
-          <div className="projects-heading-right">
-            <button
-              type="button"
-              className="button projects-view-all-cta"
-              onClick={onViewAllProjects}
-              aria-label="View all completed projects on dedicated page"
-            >
-              Open Full Projects <span className="arrow">↗</span>
+          <div className="ehome-projects__intro">
+            <p className="ehome-copy">
+              A selected portfolio of landmark developments delivered with India&rsquo;s leading real estate builders,
+              engineered for endurance, seismic resilience and architectural distinction.
+            </p>
+            <button type="button" className="ehome-btn" onClick={onViewAllProjects}>
+              Open Full Projects <span aria-hidden="true">↗</span>
             </button>
           </div>
-        </div>
+        </header>
 
-        {/* Project Grid: Exactly 3 projects on the main page */}
-        <div className="homepage-project-grid" id="completed-project-grid">
-          {displayedProjects.map((project, index) => (
-            <article
-              key={project.id}
-              className="home-project-card"
-              data-reveal
-              data-reveal-delay={(index % 3) + 1}
-              onClick={() => onSelectProject(project)}
-              tabIndex={0}
-              role="button"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  onSelectProject(project);
-                }
-              }}
-              aria-label={`View full details for ${project.name}`}
-            >
-              {/* Project Image - Always visible without hover */}
-              <div className="home-project-image-box">
-                <img
-                  src={getProjectImageUrl(project.image)}
-                  alt={`${project.name}${project.location ? `, ${project.location}` : ''}`}
-                  className="home-project-image"
-                  loading="lazy"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/empire-group-project-2560x1440.jpg';
-                  }}
-                />
-                <div className="home-project-image-shade" />
+        <div className="ehome-projects__grid">
+          {FEATURED_PROJECTS.map((project, index) => {
+            const hasYear = /^\d{4}/.test(project.year);
+            return (
+              <button
+                type="button"
+                key={project.id}
+                className="ehome-pcard"
+                data-reveal
+                data-reveal-delay={index + 1}
+                onClick={() => onSelectProject(project)}
+                aria-label={`View full details for ${project.name}`}
+              >
+                <span className="ehome-pcard__media">
+                  <img
+                    src={getProjectImageUrl(project.image)}
+                    alt=""
+                    loading="lazy"
+                    onError={(event) => {
+                      event.currentTarget.src = FALLBACK_IMAGE;
+                    }}
+                  />
+                  <span className="ehome-pcard__num">#{String(index + 1).padStart(2, '0')}</span>
+                  <span className="ehome-pcard__tag">{project.category}</span>
+                  <DeveloperLogo developer={project.developer} className="ehome-pcard__logo" />
+                </span>
 
-                {/* Badges */}
-                <div className="home-project-badges">
-                  <span className="home-project-num">#{String(index + 1).padStart(2, '0')}</span>
-                  <span className="home-project-tag">{project.category}</span>
-                </div>
-
-                {/* Hover Quick Action */}
-                <div className="home-project-hover-action">
-                  <span>View Project Dossier &amp; Specs →</span>
-                </div>
-              </div>
-
-              {/* Card Meta Content */}
-              <div className="home-project-info">
-                <p className="home-project-developer">{project.developer}</p>
-                <h3 className="home-project-title">{project.name}</h3>
-
-                <div className="home-project-row">
-                  <span className="home-project-loc">
+                <span className="ehome-pcard__body">
+                  <span className="ehome-pcard__dev">{project.developer}</span>
+                  <strong className="ehome-pcard__name">{project.name}</strong>
+                  <span className="ehome-pcard__loc">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    {project.location}
+                    {placeLabel(project)}
                   </span>
-                  <span className="home-project-city">{project.city}</span>
-                </div>
-
-                <div className="home-project-specs">
-                  <div>
-                    <span>Completion Year</span>
-                    <strong>{project.year}</strong>
-                  </div>
-                  <div>
-                    <span>Project Area</span>
-                    <strong>{project.builtUpArea}</strong>
-                  </div>
-                </div>
-
-                <div className="home-project-card-footer">
-                  <span className="home-project-detail-btn">
-                    Explore Details <span className="arrow">↗</span>
+                  <span className="ehome-pcard__specs">
+                    <span>
+                      <small>Completed</small>
+                      <b>{hasYear ? project.year : 'Delivered'}</b>
+                    </span>
+                    <span>
+                      <small>Built-up Area</small>
+                      <b>{project.builtUpArea}</b>
+                    </span>
                   </span>
-                  <span className="home-project-status-dot">
-                    <span className="dot" /> {project.year}
+                  <span className="ehome-pcard__cta">
+                    Explore Details <span aria-hidden="true">↗</span>
                   </span>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Section Bottom Controls: Only Open Full Projects button */}
-        <div className="projects-footer-cta-wrap" data-reveal>
-          <div className="projects-footer-cta-box">
-            <div className="cta-box-text">
-              <h4>Want to see all our landmark developments?</h4>
-              <p>Explore completed projects with full specifications, developer partnerships, and engineering highlights.</p>
-            </div>
-            <div className="cta-box-buttons">
-              <button
-                type="button"
-                className="button projects-primary-more-btn"
-                onClick={onViewAllProjects}
-              >
-                Open Full Projects <span className="arrow">↗</span>
+                </span>
               </button>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>

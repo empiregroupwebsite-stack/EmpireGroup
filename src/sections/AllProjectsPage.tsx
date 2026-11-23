@@ -1,3 +1,4 @@
+import { DeveloperLogo } from '../components/ClientLogo';
 import { completedProjectsData, getProjectImageUrl, type Project } from '../data/projectsData';
 
 interface AllProjectsPageProps {
@@ -26,7 +27,10 @@ export function AllProjectsPage(_props: AllProjectsPageProps) {
               <dl>
                 <div>
                   <dt>Client</dt>
-                  <dd>{project.developer}</dd>
+                  <dd className="simple-project-client">
+                    <DeveloperLogo developer={project.developer} />
+                    {project.developer}
+                  </dd>
                 </div>
                 <div>
                   <dt>Completion Year</dt>

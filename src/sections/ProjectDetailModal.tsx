@@ -1,3 +1,4 @@
+import { DeveloperLogo } from '../components/ClientLogo';
 import { useEffect } from 'react';
 import { getProjectImageUrl, completedProjectsData, type Project } from '../data/projectsData';
 
@@ -88,7 +89,10 @@ export function ProjectDetailModal({
           </div>
 
           <div className="project-modal-hero-caption">
-            <p className="project-modal-client">Client &amp; Partner: <strong>{project.developer}</strong></p>
+            <p className="project-modal-client">
+              <DeveloperLogo developer={project.developer} className="project-modal-client-logo" />
+              <span>Client &amp; Partner: <strong>{project.developer}</strong></span>
+            </p>
             <h2 id="modal-project-title" className="project-modal-title">{project.name}</h2>
             <p className="project-modal-location">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

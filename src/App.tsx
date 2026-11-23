@@ -106,7 +106,7 @@ export default function App() {
 
     const onScroll = () => {
       setHeaderScrolled(window.scrollY > 24);
-      const hero = document.querySelector('.hero');
+      const hero = document.getElementById('home');
       setHeaderLogoHidden(hero ? hero.getBoundingClientRect().bottom <= 72 : window.scrollY > 24);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -344,7 +344,11 @@ export default function App() {
         <main key={view} className="page-route page-route--enter">
           {view === 'home' ? (
             <>
-              <Hero />
+              <Hero
+                onSelectProject={handleSelectProject}
+                onViewOngoingProjects={navigateToOngoingProjects}
+                onViewAllProjects={navigateToAllProjects}
+              />
               <Projects
                 onSelectProject={handleSelectProject}
                 onViewAllProjects={navigateToAllProjects}
@@ -365,15 +369,9 @@ export default function App() {
               onNavigateContact={navigateToContact}
             />
           ) : view === 'equipments' ? (
-            <EquipmentsPage
-              onBackToHome={navigateToHome}
-              onNavigateContact={navigateToContact}
-            />
+            <EquipmentsPage />
           ) : view === 'awards' ? (
-            <AwardsPage
-              onBackToHome={navigateToHome}
-              onNavigateContact={navigateToContact}
-            />
+            <AwardsPage />
           ) : view === 'careers' ? (
             <CareerPage onNavigateHome={navigateToHome} />
           ) : view === 'clients' ? (

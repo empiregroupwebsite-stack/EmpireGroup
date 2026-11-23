@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { completedProjectsData, type Project } from '../data/projectsData';
 import { ongoingProjectsData, type OngoingProject } from '../data/ongoingProjectsData';
-
-interface ClientItem {
-  name: string;
-  file: string;
-}
+import { CLIENTS, matchesClient, type ClientItem } from '../data/clientsData';
+import { ClientLogo } from '../components/ClientLogo';
 
 interface ClientProject {
   name: string;
@@ -15,25 +13,7 @@ interface ClientProject {
   status: 'Completed' | 'Ongoing';
 }
 
-const clientLogos: readonly ClientItem[] = [
-  { name: 'Amanora', file: 'amanora.png' },
-  { name: 'Amit', file: 'amit.png' },
-  { name: 'Honeywell', file: 'honeywell.png' },
-  { name: 'Kolte Patil', file: 'koltpatil.png' },
-  { name: 'Konark', file: 'konark.png' },
-  { name: 'Kumar', file: 'kumar.png' },
-  { name: 'Lodha', file: 'lodha.png' },
-  { name: 'Magarpatta', file: 'magarpatta.png' },
-  { name: 'Marvel', file: 'marvel.png' },
-  { name: 'Naiknavare', file: 'naiknavare.png' },
-  { name: 'Nanded City', file: 'nandedcity.png' },
-  { name: 'Paranjape', file: 'paranjape.png' },
-  { name: 'Puneville', file: 'puneville.png' },
-  { name: 'Runwal Seagull', file: 'runwalseagul.png' },
-  { name: 'Solitare', file: 'solitare.png' },
-  { name: 'VTP', file: 'vtp.png' },
-  { name: 'Xrbia', file: 'xrbia.png' },
-];
+const clientLogos = CLIENTS;
 
 const allProjects: ClientProject[] = [
   ...completedProjectsData.map((project: Project) => ({
@@ -52,37 +32,13 @@ const allProjects: ClientProject[] = [
   })),
 ];
 
-function getClientProjects(clientName: string): ClientProject[] {
-  const normalized = clientName.toLowerCase().trim();
-
-  return allProjects.filter((project) => {
-    const developer = project.developer.toLowerCase();
-    const name = project.name.toLowerCase();
-    const combined = `${developer} ${name}`;
-
-    const aliases: Record<string, string[]> = {
-      amanora: ['amanora', 'city corporation'],
-      amit: ['amit'],
-      honeywell: ['honeywell'],
-      'kolte patil': ['kolte', 'kolte patil'],
-      konark: ['konark'],
-      kumar: ['kumar'],
-      lodha: ['lodha'],
-      magarpatta: ['magarpatta'],
-      marvel: ['marvel'],
-      naiknavare: ['naiknavare'],
-      'nanded city': ['nanded'],
-      paranjape: ['paranjape'],
-      puneville: ['puneville', 'pharande'],
-      'runwal seagull': ['runwal'],
-      solitare: ['solitare', 'solitaire'],
-      vtp: ['vtp'],
-      xrbia: ['xrbia'],
-    };
-
-    return (aliases[normalized] ?? [normalized]).some((alias) => combined.includes(alias));
-  });
+function getClientProjects(client: ClientItem): ClientProject[] {
+  return allProjects.filter((project) => matchesClient(client, `${project.developer} ${project.name}`));
 }
+
+const projectCounts = new Map(
+  clientLogos.map((client) => [client.name, getClientProjects(client).length]),
+);
 
 export function Clients() {
   const [selectedClient, setSelectedClient] = useState<ClientItem | null>(null);
@@ -104,7 +60,7 @@ export function Clients() {
     };
   }, [selectedClient, closeModal]);
 
-  const selectedProjects = selectedClient ? getClientProjects(selectedClient.name) : [];
+  const selectedProjects = selectedClient ? getClientProjects(selectedClient) : [];
 
   return (
     <section className="clients-section" id="clients" aria-labelledby="clients-title">
@@ -114,35 +70,39 @@ export function Clients() {
           <h2 className="section-heading" id="clients-title">
             India&apos;s most respected real estate developers <em>trust us.</em>
           </h2>
+          <p className="clients-subtitle">
+            {clientLogos.length}+ developers, {allProjects.length} projects delivered and underway. Select a client to explore our work together.
+          </p>
         </div>
 
-        <div className="client-logo-grid" aria-label="Trusted real estate clients">
-          {clientLogos.map((client, index) => (
-            <button
-              type="button"
-              className={`client-logo ${selectedClient?.name === client.name ? 'selected' : ''}`}
-              key={client.name}
-              style={{ '--client-delay': `${index * 55}ms` } as React.CSSProperties}
-              onClick={() => setSelectedClient(client)}
-            >
-              <span className="client-logo-image">
-                <span className="client-logo-fallback" aria-hidden="true">
-                  {client.name.split(/\s+/).map((word) => word[0]).join('').slice(0, 3)}
-                </span>
-                <img
-                  src={`https://www.empiireprojects.in/clients/${client.file}`}
-                  alt={`${client.name} logo`}
-                  loading="eager"
-                  decoding="async"
-                  onError={(event) => event.currentTarget.classList.add('is-broken')}
-                />
-              </span>
-              <span className="client-logo-name">{client.name}</span>
-            </button>
-          ))}
-        </div>
+        <ul className="clients-grid" aria-label="Trusted real estate clients" data-reveal>
+          {clientLogos.map((client, index) => {
+            const projectCount = projectCounts.get(client.name) ?? 0;
+            return (
+              <li key={client.name} style={{ '--i': index } as React.CSSProperties}>
+                <button
+                  type="button"
+                  className={`client-card ${selectedClient?.name === client.name ? 'is-selected' : ''}`}
+                  onClick={() => setSelectedClient(client)}
+                  aria-label={`View ${client.name} details`}
+                >
+                  <span className="client-card-logo">
+                    <ClientLogo client={client} />
+                  </span>
+                  <span className="client-card-name">{client.name}</span>
+                  <span className="client-card-meta" aria-hidden="true">
+                    {projectCount > 0 ? `${projectCount} ${projectCount === 1 ? 'project' : 'projects'}` : 'View details'}
+                    <span className="client-card-arrow">→</span>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
 
-        {selectedClient && (
+        {selectedClient &&
+          createPortal(
+
           <div
             className="client-detail-overlay"
             role="dialog"
@@ -165,10 +125,7 @@ export function Clients() {
               <aside className="client-detail-left">
                 <span className="client-detail-eyebrow">Selected Client</span>
                 <div className="client-detail-logo">
-                  <img
-                    src={`https://www.empiireprojects.in/clients/${selectedClient.file}`}
-                    alt={`${selectedClient.name} logo`}
-                  />
+                  <ClientLogo client={selectedClient} />
                 </div>
                 <h3 id="client-detail-title">{selectedClient.name}</h3>
                 <div className="client-detail-count">
@@ -226,8 +183,9 @@ export function Clients() {
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          </div>,
+            document.body,
+          )}
       </div>
     </section>
   );

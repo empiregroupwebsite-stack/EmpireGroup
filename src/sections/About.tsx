@@ -7,69 +7,64 @@ interface AboutSectionProps {
 
 export function About({ onNavigateAbout, onNavigateContact }: AboutSectionProps) {
   return (
-    <section className="about" id="about" aria-labelledby="about-title">
-      <div className="container about-grid">
-        <div className="about-visual" data-reveal="left">
-          <CityIllustration />
-
-          <div className="about-stamp">
-            <strong>50+</strong>
-            <span>Projects Delivered</span>
-          </div>
-        </div>
-
-        <div className="about-copy" data-reveal data-reveal-delay="1">
-          <p className="eyebrow">The Empire Group Standard</p>
-          <h2 className="section-heading" id="about-title">
+    <section className="ehome-about" id="about" aria-labelledby="about-title">
+      <div className="ehome-about__inner">
+        <div className="ehome-about__copy" data-reveal data-reveal-delay="1">
+          <p className="ehome-eyebrow">The Empire Group Standard</p>
+          <h2 className="ehome-heading" id="about-title">
             Driven by quality and excellence <em>since 2002.</em>
           </h2>
-          <p className="section-copy">
+          <p className="ehome-copy">
             Headquartered in Pune, Empire Group Infrastructure &amp; Developers is a client-focused construction company known for quality, safety, and timely execution. Our experienced civil engineering team delivers high-rise residential, commercial, township, and industrial projects across Maharashtra and India.
           </p>
-          <p className="section-copy">
+          <p className="ehome-copy ehome-about__extra">
             We follow the principles of quality, consistency, compliance, safety, and environmental responsibility across every project we undertake.
           </p>
-          <div className="about-metrics-mini">
-            <div className="mini-metric">
-              <strong>25+</strong>
-              <span>Years in Industry</span>
-            </div>
-            <div className="mini-metric">
-              <strong>50+</strong>
-              <span>Projects Completed</span>
-            </div>
-            <div className="mini-metric">
-              <strong>35M+</strong>
-              <span>Sq. Ft. Delivered</span>
-            </div>
-          </div>
 
-          <div className="about-actions-row">
+          <dl className="ehome-about__metrics">
+            <div>
+              <dt>Years in Industry</dt>
+              <dd>25<span>+</span></dd>
+            </div>
+            <div>
+              <dt>Projects Completed</dt>
+              <dd>50<span>+</span></dd>
+            </div>
+            <div>
+              <dt>Sq. Ft. Delivered</dt>
+              <dd>35<span>M+</span></dd>
+            </div>
+          </dl>
+
+          <div className="ehome-about__actions">
             {onNavigateAbout && (
-              <button
-                type="button"
-                className="button button--about-full"
-                onClick={onNavigateAbout}
-              >
-                <span>Read Full Company Profile &amp; Heritage</span>
-                <span className="arrow" aria-hidden="true">↗</span>
+              <button type="button" className="ehome-btn" onClick={onNavigateAbout}>
+                Company Profile &amp; Heritage <span aria-hidden="true">↗</span>
               </button>
             )}
             <a
-              className="text-link"
+              className="ehome-link"
               href="#contact"
-              onClick={(e) => {
+              onClick={(event) => {
                 if (onNavigateContact) {
-                  e.preventDefault();
+                  event.preventDefault();
                   onNavigateContact();
                 }
               }}
             >
-              Partner With Our Engineering Team <span className="arrow">↗</span>
+              Partner With Our Engineering Team <span aria-hidden="true">→</span>
             </a>
           </div>
 
-          <p className="about-signoff">Turnkey EPC Contracting · High-Rise Specialization · Precision Delivery</p>
+          <p className="ehome-about__signoff">Turnkey EPC Contracting · High-Rise Specialization · Precision Delivery</p>
+        </div>
+
+        <div className="ehome-about__visual" data-reveal="left">
+          <CityIllustration />
+          <div className="ehome-about__stamp">
+            <strong>50+</strong>
+            <span>Projects Delivered</span>
+          </div>
         </div>
       </div>
     </section>

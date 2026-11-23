@@ -1,3 +1,4 @@
+import { DeveloperLogo } from '../components/ClientLogo';
 import { ongoingProjectsData } from '../data/ongoingProjectsData';
 
 interface OngoingProjectsPageProps {
@@ -25,7 +26,10 @@ export function OngoingProjectsPage(_props: OngoingProjectsPageProps) {
               <dl>
                 <div>
                   <dt>Client</dt>
-                  <dd>{project.developer}</dd>
+                  <dd className="simple-project-client">
+                    <DeveloperLogo developer={project.developer} />
+                    {project.developer}
+                  </dd>
                 </div>
                 <div>
                   <dt>Year</dt>
