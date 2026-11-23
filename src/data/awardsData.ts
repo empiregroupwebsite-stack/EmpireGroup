@@ -10,6 +10,7 @@ export interface AwardItem {
   badge: string;
 }
 
+// Housekeeping Appreciation Award is intentionally shown last.
 export const awardsData: AwardItem[] = [
   {
     id: 'axis-bank-partnership',
@@ -20,7 +21,7 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'Empire Projects and Developments Private Limited',
     description: 'A formal appreciation recognizing Empire Projects & Developments as a trusted partner in progress.',
     badge: 'Partner Recognition',
-    image: '/award-axis-bank.jpeg',
+    image: '/award-axis-bank.jpeg'
   },
   {
     id: 'vtp-housekeeping-plaque',
@@ -31,18 +32,7 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'VTP Pegasus Project',
     description: 'Recognized for outstanding housekeeping and site-maintenance standards at VTP Pegasus.',
     badge: 'Housekeeping Excellence',
-    image: '/award-vtp-housekeeping-trophy.jpeg',
-  },
-  {
-    id: 'dolce-vita-housekeeping-award',
-    title: 'Housekeeping Appreciation Award',
-    category: 'Safety & HSE',
-    organization: 'VTP Realty',
-    year: '2026',
-    projectOrScope: 'VTP Dolce Vita Project',
-    description: 'Presented to Empire Infra for maintaining exceptional housekeeping standards at VTP Dolce Vita.',
-    badge: 'Housekeeping Award',
-    image: '/award-dolce-vita.jpeg',
+    image: '/award-vtp-housekeeping-trophy.jpeg'
   },
   {
     id: 'vtp-pegasus-march-2022',
@@ -53,7 +43,7 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'VTP Pegasus Project, Pune',
     description: 'Certificate recognizing adoption of HSE norms and adjudged Best Housekeeping for the month of March 2022.',
     badge: 'HSE Certificate',
-    image: '/award-vtp-pegasus-march-2022.jpeg',
+    image: '/award-vtp-pegasus-march-2022.jpeg'
   },
   {
     id: 'cemcon-2014',
@@ -64,7 +54,7 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'National Conference on Composite Construction & Modern Concrete',
     description: 'Empire Group was presented as a sponsor of CEMCON 2014 in Pune.',
     badge: 'Conference Sponsor',
-    image: '/award-cemcon-2014.jpeg',
+    image: '/award-cemcon-2014.jpeg'
   },
   {
     id: 'lodha-belavita-may-2024',
@@ -75,7 +65,7 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'Lodha Belavita, Pune',
     description: 'Certificate of appreciation awarded for dedicated support and contribution to EHS excellence at Lodha Belavita.',
     badge: 'EHS Appreciation',
-    image: '/award-lodha-ehs-may-2024.jpeg',
+    image: '/award-lodha-ehs-may-2024.jpeg'
   },
   {
     id: 'gst-appreciation-2024-25',
@@ -86,7 +76,7 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'GST Registration 27AAECE3648R1ZZ',
     description: 'Recognized for prompt GST return filing and timely payment of Goods & Services Tax during the financial year 2024-25.',
     badge: 'Government Recognition',
-    image: '/award-gst-appreciation-2024-25.jpeg',
+    image: '/award-gst-appreciation-2024-25.jpeg'
   },
   {
     id: 'konark-completion-2022',
@@ -97,7 +87,7 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'Konark Virtue, Keshavnagar, Mundhwa',
     description: 'Appreciation for successful completion of Towers T-02 and T-03 at Konark Virtue.',
     badge: 'Project Appreciation',
-    image: '/award-konark-2022.jpeg',
+    image: '/award-konark-2022.jpeg'
   },
   {
     id: 'konark-completion-2024',
@@ -108,7 +98,7 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'Konark Virtue, Towers 2 and 3',
     description: 'Recognition of meticulous construction, quality standards, safety protocols and commitment to excellence.',
     badge: 'Completion Citation',
-    image: '/award-konark-2024.jpeg',
+    image: '/award-konark-2024.jpeg'
   },
   {
     id: 'paranjape-zero-accident',
@@ -119,6 +109,17 @@ export const awardsData: AwardItem[] = [
     projectOrScope: 'Empire Construction',
     description: 'Certificate of appreciation for achieving and maintaining zero accident performance during 2016-17.',
     badge: 'Safety Achievement',
-    image: '/award-paranjape-2017.jpeg',
+    image: '/award-paranjape-2017.jpeg'
+  },
+  {
+    id: 'dolce-vita-housekeeping-award',
+    title: 'Housekeeping Appreciation Award',
+    category: 'Safety & HSE',
+    organization: 'VTP Realty',
+    year: '2026',
+    projectOrScope: 'VTP Dolce Vita Project',
+    description: 'Presented to Empire Infra for maintaining exceptional housekeeping standards at VTP Dolce Vita.',
+    badge: 'Housekeeping Award',
+    image: '/award-dolce-vita.jpeg'
   },
 ];

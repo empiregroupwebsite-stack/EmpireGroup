@@ -8,24 +8,26 @@ export interface ClientItem {
   aliases: string[];
 }
 
+// Display order: key partners first.
 export const CLIENTS: readonly ClientItem[] = [
-  { name: 'Amanora', file: 'amanora.png', aliases: ['amanora', 'city corporation'] },
-  { name: 'Amit', file: 'amit.png', aliases: ['amit'] },
-  { name: 'Honeywell', file: 'honeywell.png', aliases: ['honeywell'] },
+  { name: 'Godrej Properties', file: 'GodrejProperties.jpeg', aliases: ['godrej'] },
+  { name: 'Lodha', file: 'lodha.png', aliases: ['lodha'] },
+  { name: 'VTP', file: 'vtp.png', aliases: ['vtp'] },
+  { name: 'Magarpatta', file: 'magarpatta.png', aliases: ['magarpatta'] },
   { name: 'Kolte Patil', file: 'koltpatil.png', aliases: ['kolte'] },
+  { name: 'Paranjape', file: 'paranjape.png', aliases: ['paranjape'] },
+  { name: 'Nanded City', file: 'nandedcity.png', aliases: ['nanded'] },
   { name: 'Konark', file: 'konark.png', aliases: ['konark'] },
   { name: 'Kumar', file: 'kumar.png', aliases: ['kumar'] },
-  { name: 'Lodha', file: 'lodha.png', aliases: ['lodha'] },
-  { name: 'Magarpatta', file: 'magarpatta.png', aliases: ['magarpatta'] },
-  { name: 'Marvel', file: 'marvel.png', aliases: ['marvel'] },
   { name: 'Naiknavare', file: 'naiknavare.png', aliases: ['naiknavare'] },
-  { name: 'Nanded City', file: 'nandedcity.png', aliases: ['nanded'] },
-  { name: 'Paranjape', file: 'paranjape.png', aliases: ['paranjape'] },
+  { name: 'Amanora', file: 'amanora.png', aliases: ['amanora', 'city corporation'] },
   { name: 'Puneville', file: 'puneville.png', aliases: ['puneville', 'pharande'] },
   { name: 'Runwal Seagull', file: 'runwalseagul.png', aliases: ['runwal'] },
+  { name: 'Marvel', file: 'marvel.png', aliases: ['marvel'] },
   { name: 'Solitare', file: 'solitare.png', aliases: ['solitare', 'solitaire'] },
-  { name: 'VTP', file: 'vtp.png', aliases: ['vtp'] },
   { name: 'Xrbia', file: 'xrbia.png', aliases: ['xrbia'] },
+  { name: 'Amit', file: 'amit.png', aliases: ['amit'] },
+  { name: 'Honeywell', file: 'honeywell.png', aliases: ['honeywell'] },
 ];
 
 export const clientLogoSrc = (client: ClientItem) => `/clients/${client.file}`;

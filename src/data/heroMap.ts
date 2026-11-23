@@ -19,9 +19,6 @@ export function projectLatLon(lat: number, lon: number): MapPoint {
   return { x: X_ORIGIN + (lon - X_LON) * X_SCALE, y: Y_ORIGIN - Y_SCALE * mercator };
 }
 
-/** Map units per kilometre around central India (1° latitude ≈ 111 km ≈ 22 units). */
-export const UNITS_PER_KM = 22.15 / 111;
-
 export interface HeroCity {
   key: string;
   name: string;
@@ -59,14 +56,14 @@ export const HERO_CITIES: HeroCity[] = [
     matches: (city) => city.includes('mumbai') || city.includes('thane'),
   },
   {
-    key: 'vijayawada',
-    name: 'Vijayawada',
-    state: 'Andhra Pradesh',
-    stateId: 'ap',
-    lat: 16.5062,
-    lon: 80.648,
+    key: 'hyderabad',
+    name: 'Hyderabad',
+    state: 'Telangana',
+    stateId: 'tg',
+    lat: 17.385,
+    lon: 78.4867,
     labelSide: 'right',
-    matches: (city) => city.includes('vijayawada'),
+    matches: (city) => city.includes('hyderabad'),
   },
 ];
 
@@ -124,7 +121,6 @@ export const REFERENCE_CITIES: Array<MapPoint & { name: string; labelSide: 'left
   { name: 'New Delhi', labelSide: 'right', ...projectLatLon(28.6139, 77.209) },
   { name: 'Ahmedabad', labelSide: 'left', ...projectLatLon(23.0225, 72.5714) },
   { name: 'Kolkata', labelSide: 'right', ...projectLatLon(22.5726, 88.3639) },
-  { name: 'Hyderabad', labelSide: 'left', ...projectLatLon(17.385, 78.4867) },
   { name: 'Bengaluru', labelSide: 'left', ...projectLatLon(12.9716, 77.5946) },
   { name: 'Chennai', labelSide: 'right', ...projectLatLon(13.0827, 80.2707) },
 ];

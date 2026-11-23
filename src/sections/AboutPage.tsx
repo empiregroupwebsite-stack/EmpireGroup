@@ -1,13 +1,23 @@
-interface Leader {
-  name: string;
-  designation: string;
-  initials: string;
-}
+import { Fragment } from 'react';
+import { COMPANY_STATS } from '../data/companyStats';
 
-const leaders: Leader[] = [
-  { name: 'Nadeem Momin', designation: 'Director', initials: 'NM' },
-  { name: 'Suraj Wadia', designation: 'Finance & Accounts', initials: 'SW' },
-  { name: 'Manohar Peddi', designation: 'Contract & Billing', initials: 'MP' },
+const CORE_VALUES = [
+  {
+    title: 'Engineering Excellence',
+    text: 'Precision, quality, technical expertise, and continuous improvement.',
+  },
+  {
+    title: 'Trust & Integrity',
+    text: 'Building lasting relationships through honesty, transparency, and accountability.',
+  },
+  {
+    title: 'Growth & Ambition',
+    text: 'Growing responsibly, expanding capabilities, and achieving new milestones.',
+  },
+  {
+    title: 'Commitment & Ownership',
+    text: 'Taking ownership of every project, every commitment, and every result.',
+  },
 ];
 
 export function AboutPage({
@@ -20,60 +30,13 @@ export function AboutPage({
     <div className="about-page empire-about-page" id="about-page-view">
 
       <main>
-        <section className="empire-leadership" aria-labelledby="leadership-title">
-          <div className="container">
-            <div className="empire-about-heading" data-reveal>
-              <p className="eyebrow">Company Leadership</p>
-              <h1 className="section-heading" id="leadership-title">
-                Leadership built on <em>experience.</em>
-              </h1>
-            </div>
-
-            <div className="empire-leadership-grid">
-              {leaders.map((leader) => (
-                <article className="empire-leader-card" key={leader.name} data-reveal>
-                  <div className="empire-leader-portrait" aria-label={`${leader.name}, ${leader.designation}`}>
-                    <span>{leader.initials}</span>
-                  </div>
-                  <div className="empire-leader-info">
-                    <h2>{leader.name}</h2>
-                    <p>{leader.designation}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <div className="empire-scale-strip" aria-label="EmpireGroup scale" data-reveal>
-              <div className="empire-scale-item">
-                <strong>25+</strong>
-                <span>Years Legacy</span>
-              </div>
-              <div className="empire-scale-divider" aria-hidden="true" />
-              <div className="empire-scale-item">
-                <strong>50+</strong>
-                <span>Projects</span>
-              </div>
-              <div className="empire-scale-divider" aria-hidden="true" />
-              <div className="empire-scale-item">
-                <strong>100%</strong>
-                <span>Quality Consistency</span>
-              </div>
-              <div className="empire-scale-divider" aria-hidden="true" />
-              <div className="empire-scale-item">
-                <strong>100+</strong>
-                <span>Satisfied Clients</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section className="empire-about-company" aria-labelledby="about-company-title">
           <div className="container">
             <div className="empire-about-heading" data-reveal>
               <p className="eyebrow">About EmpireGroup</p>
-              <h2 className="section-heading" id="about-company-title">
+              <h1 className="section-heading" id="about-company-title">
                 Building with purpose. <em>Delivering with excellence.</em>
-              </h2>
+              </h1>
             </div>
             <div className="empire-introduction" data-reveal>
               <p>
@@ -92,6 +55,38 @@ export function AboutPage({
                 at every stage.
               </p>
             </div>
+
+            <div className="empire-scale-strip" aria-label="EmpireGroup scale" data-reveal>
+              {COMPANY_STATS.map((stat, index) => (
+                <Fragment key={stat.label}>
+                  {index > 0 && <div className="empire-scale-divider" aria-hidden="true" />}
+                  <div className="empire-scale-item">
+                    <strong>{stat.value}{stat.unit}</strong>
+                    <span>{stat.label}</span>
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="empire-core-values" aria-labelledby="core-values-title">
+          <div className="container">
+            <div className="empire-about-heading" data-reveal>
+              <p className="eyebrow">What Drives Us</p>
+              <h2 className="section-heading" id="core-values-title">
+                Our Core <em>Values.</em>
+              </h2>
+            </div>
+            <ol className="empire-values-grid">
+              {CORE_VALUES.map((value, index) => (
+                <li className="empire-value-card" key={value.title} data-reveal data-reveal-delay={index + 1}>
+                  <span className="empire-value-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                  <h3>{value.title}</h3>
+                  <p>{value.text}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
@@ -99,20 +94,18 @@ export function AboutPage({
           <div className="container empire-vision-mission-grid">
             <article className="empire-purpose-card" data-reveal>
               <p className="eyebrow">Our Vision</p>
-              <h2>To become a trusted and respected name in construction and infrastructure.</h2>
-              <p>
-                We envision sustainable growth through responsible practices, exceptional project delivery,
-                and partnerships founded on confidence and professionalism.
-              </p>
+              <h2>
+                To become one of India&rsquo;s Top 5 most trusted and respected construction and infrastructure
+                companies, recognized for engineering excellence, innovation and sustainable growth.
+              </h2>
             </article>
 
             <article className="empire-purpose-card" data-reveal>
               <p className="eyebrow">Our Mission</p>
-              <h2>To deliver quality construction with efficient, professional execution.</h2>
-              <p>
-                We are committed to consistent standards, practical innovation, on-time delivery, and long-term
-                client relationships built through trust and accountability.
-              </p>
+              <h2>
+                To deliver world-class construction and infrastructure solutions through engineering excellence,
+                advanced technology, quality workmanship and continuous innovation.
+              </h2>
             </article>
           </div>
         </section>

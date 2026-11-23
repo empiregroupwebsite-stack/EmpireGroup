@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import indiaMap from '@svg-maps/india';
+import { svgPathBbox } from 'svg-path-bbox';
 import { completedProjectsData, type Project } from '../data/projectsData';
 import { ongoingProjectsData, type OngoingProject } from '../data/ongoingProjectsData';
 import { DeveloperLogo } from '../components/ClientLogo';
+import { COMPANY_STATS } from '../data/companyStats';
 import {
   HERO_CITIES,
   REFERENCE_CITIES,
-  UNITS_PER_KM,
   locateProject,
   projectLatLon,
-  type HeroCity,
   type MapPoint,
 } from '../data/heroMap';
+import { CITY_BOUNDARIES } from '../data/cityBoundaries';
 
 interface IndiaMapLocation {
   id: string;
@@ -49,7 +50,7 @@ interface Locality {
 const INDIA_STATES = indiaMap.locations as IndiaMapLocation[];
 const INDIA_BOX: Box = { x: -8, y: -8, w: 628, h: 712 };
 const PROJECT_STATE_IDS = new Set(HERO_CITIES.map((city) => city.stateId));
-const RING_KM = [5, 10, 20];
+const CITY_STATE_IDS: Record<string, string> = Object.fromEntries(HERO_CITIES.map((city) => [city.key, city.stateId]));
 const ZOOM_MS = 1150;
 const CARD_GAP = 12;
 const CARD_MIN_HEIGHT = 84;
@@ -99,17 +100,31 @@ const CITY_STATS = Object.fromEntries(
 const CITY_NAMES = HERO_CITIES.map((city) => city.name);
 const CITY_LIST_TEXT = `${CITY_NAMES.slice(0, -1).join(', ')} and ${CITY_NAMES[CITY_NAMES.length - 1]}`;
 
+/** Camera box that fits the city borders and every project locality. */
 function cityBox(cityKey: string): Box {
   const { center, localities } = CITY_STATS[cityKey];
   const points = [center, ...localities.map((locality) => locality.point)];
   const xs = points.map((point) => point.x);
   const ys = points.map((point) => point.y);
+  for (const boundary of CITY_BOUNDARIES[cityKey] ?? []) {
+    const [bMinX, bMinY, bMaxX, bMaxY] = svgPathBbox(boundary.path);
+    xs.push(bMinX, bMaxX);
+    ys.push(bMinY, bMaxY);
+  }
   const minX = Math.min(...xs);
   const maxX = Math.max(...xs);
   const minY = Math.min(...ys);
   const maxY = Math.max(...ys);
-  const size = Math.max(Math.max(maxX - minX, maxY - minY) * 1.5, 6);
+  const size = Math.max(Math.max(maxX - minX, maxY - minY) * 1.12, 6);
   return { x: (minX + maxX) / 2 - size / 2, y: (minY + maxY) / 2 - size / 2, w: size, h: size };
+}
+
+function stateBox(stateId: string): Box {
+  const state = INDIA_STATES.find((candidate) => candidate.id === stateId);
+  if (!state) return INDIA_BOX;
+  const [minX, minY, maxX, maxY] = svgPathBbox(state.path);
+  const pad = Math.max(maxX - minX, maxY - minY) * 0.08;
+  return { x: minX - pad, y: minY - pad, w: maxX - minX + pad * 2, h: maxY - minY + pad * 2 };
 }
 
 /** Grow a box around its centre until it matches the container aspect ratio. */
@@ -120,6 +135,16 @@ function fitBox(box: Box, aspect: number): Box {
   }
   const w = box.h * aspect;
   return { x: box.x - (w - box.w) / 2, y: box.y, w, h: box.h };
+}
+
+/** Fit a box into the part of the panel not covered by the chips (top) and caption (bottom), as a full-panel box. */
+function fitBoxInSafeArea(box: Box, size: Size): Box {
+  const top = MAP_SAFE_TOP + 16;
+  const bottom = size.w < COMPACT_MAP_WIDTH ? 72 : 104;
+  const safeH = Math.max(size.h - top - bottom, size.h * 0.5);
+  const fitted = fitBox(box, size.w / safeH);
+  const unitsPerPx = fitted.h / safeH;
+  return { x: fitted.x, y: fitted.y - top * unitsPerPx, w: fitted.w, h: fitted.h + (top + bottom) * unitsPerPx };
 }
 
 function easeInOutCubic(t: number) {
@@ -209,10 +234,6 @@ function completedLabel(year: string) {
   return /^\d{4}/.test(year) ? `Completed · ${year}` : 'Completed';
 }
 
-function formatCoord(city: HeroCity) {
-  return `${city.lat.toFixed(2)}°N · ${city.lon.toFixed(2)}°E`;
-}
-
 interface HeroProps {
   onSelectProject: (project: Project) => void;
   onViewOngoingProjects: () => void;
@@ -220,6 +241,7 @@ interface HeroProps {
 }
 
 export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects }: HeroProps) {
+  const [stateId, setStateId] = useState<string | null>(null);
   const [cityKey, setCityKey] = useState<string | null>(null);
   const [localityKey, setLocalityKey] = useState<string | null>(null);
   const [hovered, setHovered] = useState<HeroProject | null>(null);
@@ -230,20 +252,26 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
 
   const [viewBox, setViewBox] = useState<Box>(INDIA_BOX);
   const viewBoxRef = useRef(viewBox);
-  const lastCityRef = useRef<string | null>(cityKey);
+  // India view, state view, or city view.
+  const viewKey = cityKey ?? stateId ?? 'india';
+  const lastViewRef = useRef(viewKey);
 
   const city = HERO_CITIES.find((candidate) => candidate.key === cityKey) ?? null;
   const cityStats = city ? CITY_STATS[city.key] : null;
+  const state = INDIA_STATES.find((candidate) => candidate.id === stateId) ?? null;
   const aspect = mapSize ? mapSize.w / mapSize.h : 1;
-  const targetBox = useMemo(() => fitBox(cityKey ? cityBox(cityKey) : INDIA_BOX, aspect), [cityKey, aspect]);
+  const targetBox = useMemo(() => {
+    if (cityKey && mapSize) return fitBoxInSafeArea(cityBox(cityKey), mapSize);
+    return fitBox(cityKey ? cityBox(cityKey) : stateId ? stateBox(stateId) : INDIA_BOX, aspect);
+  }, [cityKey, stateId, aspect, mapSize]);
 
-  // Fly the camera to the target. City changes animate; container resizes snap.
+  // Fly the camera to the target. View changes animate; container resizes snap.
   useEffect(() => {
     if (!mapSize) return;
     const from = viewBoxRef.current;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const animate = lastCityRef.current !== cityKey && !reduceMotion;
-    lastCityRef.current = cityKey;
+    const animate = lastViewRef.current !== viewKey && !reduceMotion;
+    lastViewRef.current = viewKey;
 
     if (!animate) {
       viewBoxRef.current = targetBox;
@@ -262,7 +290,7 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
     };
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
-  }, [cityKey, targetBox, mapSize]);
+  }, [viewKey, targetBox, mapSize]);
 
   const labels = useMemo(
     () => (cityStats && mapSize ? placeLabels(cityStats.localities, targetBox, mapSize) : {}),
@@ -274,7 +302,10 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
   const unitsPerPx = (viewBox.w / (mapSize?.w || 600)) * markerScale;
 
   const projects = HERO_PROJECTS.filter(
-    (project) => (!cityKey || project.cityKey === cityKey) && (!localityKey || project.localityKey === localityKey),
+    (project) =>
+      (!stateId || CITY_STATE_IDS[project.cityKey] === stateId) &&
+      (!cityKey || project.cityKey === cityKey) &&
+      (!localityKey || project.localityKey === localityKey),
   );
 
   const cardMinWidth = gridSize && gridSize.w < 560 ? 160 : 250;
@@ -288,11 +319,20 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
   const activeLocality = hovered && hovered.cityKey === cityKey ? hovered.localityKey : localityKey;
   const activeCityKey = hovered && !cityKey ? hovered.cityKey : null;
 
-  function selectCity(key: string | null) {
-    setCityKey(key);
+  function selectView(nextStateId: string | null, nextCityKey: string | null) {
+    setStateId(nextStateId);
+    setCityKey(nextCityKey);
     setLocalityKey(null);
     setHovered(null);
     setPage(0);
+  }
+
+  function selectCity(key: string | null) {
+    selectView(key ? CITY_STATE_IDS[key] : null, key);
+  }
+
+  function selectState(id: string | null) {
+    selectView(id, null);
   }
 
   function toggleLocality(key: string) {
@@ -306,7 +346,8 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
   }
 
   const selectedLocality = cityStats?.localities.find((locality) => locality.key === localityKey);
-  const listTitle = selectedLocality ? selectedLocality.name : city ? city.name : 'All India';
+  const listTitle = selectedLocality?.name ?? city?.name ?? state?.name ?? 'All India';
+  const stateCityCount = state ? HERO_CITIES.filter((option) => option.stateId === state.id).length : 0;
 
   return (
     <section className="ehero" id="home" aria-labelledby="hero-title">
@@ -320,7 +361,7 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
               Infrastructure · Real Estate · EPC
             </span>
             <h1 id="hero-title" className="ehero__title">
-              Engineering Landmarks. <em>Shaping Horizons.</em>
+              Engineering Excellence. <em>Growth By Trust.</em>
             </h1>
             <p className="ehero__lead">
               Construction partner to India&rsquo;s leading developers, with landmark projects across {CITY_LIST_TEXT}.
@@ -336,18 +377,12 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
             </div>
 
             <dl className="ehero__stats">
-              <div>
-                <dt>Completed</dt>
-                <dd>{completedProjectsData.length}<span>+</span></dd>
-              </div>
-              <div>
-                <dt>Ongoing</dt>
-                <dd>{ongoingProjectsData.length}</dd>
-              </div>
-              <div>
-                <dt>Sq. Ft. Delivered</dt>
-                <dd>35<span>M+</span></dd>
-              </div>
+              {COMPANY_STATS.map((stat) => (
+                <div key={stat.label}>
+                  <dt>{stat.label}</dt>
+                  <dd>{stat.value}<span>{stat.unit}</span></dd>
+                </div>
+              ))}
             </dl>
           </div>
 
@@ -355,8 +390,8 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
             <div className="ehero-map__chips" role="group" aria-label="Choose a location">
               <button
                 type="button"
-                className={!cityKey ? 'is-active' : ''}
-                aria-pressed={!cityKey}
+                className={!stateId ? 'is-active' : ''}
+                aria-pressed={!stateId}
                 onClick={() => selectCity(null)}
               >
                 India <small>{HERO_PROJECTS.length}</small>
@@ -380,27 +415,30 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
                 viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
                 preserveAspectRatio="xMidYMid meet"
                 role="img"
-                aria-label={city ? `Map of ${city.name} project localities` : 'Map of India with Empire Group project cities'}
+                aria-label={
+                  city
+                    ? `Map of ${city.name} city border with project localities`
+                    : state
+                      ? `Map of ${state.name} with Empire Group project cities`
+                      : 'Map of India with Empire Group project cities'
+                }
               >
-                <defs>
-                  <radialGradient id="eheroCityGlow">
-                    <stop offset="0%" stopColor="#f0af68" stopOpacity="0.32" />
-                    <stop offset="60%" stopColor="#f0af68" stopOpacity="0.08" />
-                    <stop offset="100%" stopColor="#f0af68" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
-
-                <g className="ehero-map__states">
-                  {INDIA_STATES.map((state) => {
-                    const isFocus = city?.stateId === state.id;
-                    const hasProjects = PROJECT_STATE_IDS.has(state.id);
+                <g className={`ehero-map__states ${city ? 'is-locked' : ''}`}>
+                  {INDIA_STATES.map((option) => {
+                    const isFocus = stateId === option.id;
+                    const hasProjects = PROJECT_STATE_IDS.has(option.id);
                     return (
                       <path
-                        key={state.id}
-                        d={state.path}
+                        key={option.id}
+                        d={option.path}
                         className={isFocus ? 'is-focus' : hasProjects ? 'is-active' : undefined}
+                        role="button"
+                        tabIndex={!city && hasProjects && !isFocus ? 0 : -1}
+                        aria-label={`Show ${option.name} map`}
+                        onClick={() => !isFocus && selectState(option.id)}
+                        onKeyDown={onActivate(() => !isFocus && selectState(option.id))}
                       >
-                        <title>{state.name}</title>
+                        <title>{option.name}</title>
                       </path>
                     );
                   })}
@@ -446,25 +484,25 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
                     );
                   })}
 
-                  <text className="ehero-map__sea" x="10" y="610">ARABIAN SEA</text>
-                  <text className="ehero-map__sea" x="400" y="520">BAY OF BENGAL</text>
+                  {!state && (
+                    <>
+                      <text className="ehero-map__sea" x="10" y="610">ARABIAN SEA</text>
+                      <text className="ehero-map__sea" x="400" y="520">BAY OF BENGAL</text>
+                    </>
+                  )}
                 </g>
 
-                {/* City view: distance rings and locality pins */}
+                {/* City view: city borders with locality pins */}
                 {city && cityStats && (
                   <g className="ehero-map__layer ehero-map__layer--city is-visible" key={city.key}>
-                    <circle cx={cityStats.center.x} cy={cityStats.center.y} r={22 * UNITS_PER_KM} fill="url(#eheroCityGlow)" />
-                    {RING_KM.map((km) => (
-                      <g key={km}>
-                        <circle className="ehero-ring" cx={cityStats.center.x} cy={cityStats.center.y} r={km * UNITS_PER_KM} />
-                        <g transform={`translate(${cityStats.center.x} ${cityStats.center.y - km * UNITS_PER_KM}) scale(${unitsPerPx})`}>
-                          <text className="ehero-ring__label" y="-5" textAnchor="middle">{km} km</text>
+                    {CITY_BOUNDARIES[city.key]?.map((boundary) => (
+                      <g key={boundary.name} className="ehero-border">
+                        <path d={boundary.path} fillRule="evenodd" />
+                        <g transform={`translate(${boundary.label.x} ${boundary.label.y}) scale(${unitsPerPx})`}>
+                          <text y="-8" textAnchor="middle">{boundary.name}</text>
                         </g>
                       </g>
                     ))}
-                    <line className="ehero-cross" x1={cityStats.center.x - 40} x2={cityStats.center.x + 40} y1={cityStats.center.y} y2={cityStats.center.y} />
-                    <line className="ehero-cross" y1={cityStats.center.y - 40} y2={cityStats.center.y + 40} x1={cityStats.center.x} x2={cityStats.center.x} />
-
                     {cityStats.localities.map((locality) => {
                       const count = locality.completed + locality.ongoing;
                       const tone = locality.completed === 0 ? 'is-ongoing' : '';
@@ -501,22 +539,36 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
                 )}
               </svg>
 
-              {city && cityStats && (
-                <div className="ehero-map__caption">
-                  <button type="button" className="ehero-map__back" onClick={() => selectCity(null)}>
-                    <span aria-hidden="true">←</span> India
+              {city && cityStats ? (
+                <div className="ehero-map__caption" key={city.key}>
+                  <button type="button" className="ehero-map__back" onClick={() => selectState(city.stateId)}>
+                    <span aria-hidden="true">←</span> {city.state}
                   </button>
                   <div>
                     <strong>{city.name}</strong>
                     <span>{city.state} · {cityStats.localities.length} localities</span>
                   </div>
                 </div>
+              ) : state && (
+                <div className="ehero-map__caption" key={state.id}>
+                  <button type="button" className="ehero-map__back" onClick={() => selectState(null)}>
+                    <span aria-hidden="true">←</span> India
+                  </button>
+                  <div>
+                    <strong>{state.name}</strong>
+                    <span>{projects.length} project{projects.length === 1 ? '' : 's'} · {stateCityCount} cit{stateCityCount === 1 ? 'y' : 'ies'}</span>
+                  </div>
+                </div>
               )}
 
-              <div className="ehero-map__footer" aria-hidden="true">
-                <span className="ehero-legend"><i className="is-completed" /> Completed</span>
-                <span className="ehero-legend"><i className="is-ongoing" /> Ongoing</span>
-                <span className="ehero-map__coords">{city ? formatCoord(city) : '20.59°N · 78.96°E'}</span>
+              <div className="ehero-map__footer">
+                <span className="ehero-legend" aria-hidden="true"><i className="is-completed" /> Completed</span>
+                <span className="ehero-legend" aria-hidden="true"><i className="is-ongoing" /> Ongoing</span>
+                {city ? (
+                  <span className="ehero-map__credit">City borders © OpenStreetMap contributors</span>
+                ) : (
+                  <span className="ehero-map__coords" aria-hidden="true">20.59°N · 78.96°E</span>
+                )}
               </div>
             </div>
           </div>
@@ -553,6 +605,9 @@ export function Hero({ onSelectProject, onViewOngoingProjects, onViewAllProjects
             style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))` }}
             onMouseLeave={() => setHovered(null)}
           >
+            {projects.length === 0 && (
+              <p className="ehero-cards__empty">No Empire Group projects in {listTitle} yet.</p>
+            )}
             {pageProjects.map((project) => {
               const isOngoing = project.kind === 'ongoing';
               return (

@@ -1,4 +1,5 @@
 import { CityIllustration } from '../components/CityIllustration';
+import { COMPANY_STATS } from '../data/companyStats';
 
 interface AboutSectionProps {
   onNavigateAbout?: () => void;
@@ -22,18 +23,12 @@ export function About({ onNavigateAbout, onNavigateContact }: AboutSectionProps)
           </p>
 
           <dl className="ehome-about__metrics">
-            <div>
-              <dt>Years in Industry</dt>
-              <dd>25<span>+</span></dd>
-            </div>
-            <div>
-              <dt>Projects Completed</dt>
-              <dd>50<span>+</span></dd>
-            </div>
-            <div>
-              <dt>Sq. Ft. Delivered</dt>
-              <dd>35<span>M+</span></dd>
-            </div>
+            {COMPANY_STATS.map((stat) => (
+              <div key={stat.label}>
+                <dt>{stat.label}</dt>
+                <dd>{stat.value}<span>{stat.unit}</span></dd>
+              </div>
+            ))}
           </dl>
 
           <div className="ehome-about__actions">
