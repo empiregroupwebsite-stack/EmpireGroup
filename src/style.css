@@ -13029,50 +13029,78 @@ svg {
   }
 }
 
-
 /* =========================================================
    AWARDS PAGE - KEEP THE CAROUSEL INSIDE ONE VIEWPORT
-   Card width is also capped by the height left after the header,
-   card text and controls (~290px), so short screens never scroll.
+   The stage takes the height left after the header and controls;
+   card width is then capped so image (4:3) + text fit that height.
    ========================================================= */
 .awards-page {
   height: 100vh;
   height: 100svh;
+  min-height: 0;
+  padding-bottom: clamp(12px, 3vh, 48px);
+}
+
+.awards-carousel {
+  min-height: 0;
+  padding-top: clamp(0px, 2vh, 40px);
+  gap: clamp(10px, 2.4vh, 40px);
 }
 
 .awards-stage {
-  --card-fit-w: max(160px, calc((100svh - var(--site-header-h) - 290px) * 4 / 3));
+  --card-body-h: 200px;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  padding: clamp(6px, 2vh, 24px) 0;
+  container-type: size;
 }
 
+/* Active card is scaled 1.08, so its image height is width × 0.75 × 1.08 = width × 0.81. */
 .award-slide {
-  width: min(var(--card-w), var(--card-fit-w));
+  width: min(var(--card-w), max(140px, calc((100cqh - var(--card-body-h)) / 0.81)));
 }
 
-@media (max-height: 600px) {
-  .awards-page {
-    padding-top: calc(var(--site-header-h) + 8px);
-    padding-bottom: 10px;
-  }
-
-  .awards-carousel {
-    gap: 10px;
-    padding-top: 0;
-  }
-
+@media (max-height: 720px) {
   .awards-stage {
-    --card-fit-w: max(150px, calc((100svh - var(--site-header-h) - 190px) * 4 / 3));
-    padding: 6px 0;
+    --card-body-h: 120px;
   }
 
   .award-card-body {
-    padding: 8px 12px 10px;
+    padding: 10px 14px 12px;
+  }
+
+  .award-card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .award-card-org {
     display: none;
   }
+}
 
-  .award-slide.is-active {
-    transform: translateX(0) scale(1);
+@media (max-height: 520px) {
+  .awards-page {
+    padding-top: calc(var(--site-header-h) + 6px);
+  }
+
+  .awards-stage {
+    --card-body-h: 60px;
+  }
+
+  .award-card-top {
+    display: none;
+  }
+
+  .award-card-body {
+    padding: 8px 12px;
+  }
+
+  .awards-nav-button {
+    width: 40px;
+    height: 40px;
   }
 }
