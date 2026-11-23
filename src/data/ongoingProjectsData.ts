@@ -6,6 +6,7 @@ export interface OngoingProject {
   city: string;
   category: 'Residential High-Rise' | 'Integrated Township' | 'Commercial & SEZ' | 'Township Sector';
   image: string;
+  developerLogo?: string;
   builtUpArea: string;
   floors: string;
   scope: string;
@@ -24,7 +25,7 @@ export const ongoingProjectsData: OngoingProject[] = [
     location: 'Manjri',
     city: 'Pune, Maharashtra',
     category: 'Residential High-Rise',
-    image: '/empire-group-project-2560x1440.jpg',
+    image: '/dolce-vita-ongoing.jpeg',
     builtUpArea: 'Details to be updated',
     floors: 'Details to be updated',
     scope: 'Civil construction and project execution',
@@ -41,7 +42,7 @@ export const ongoingProjectsData: OngoingProject[] = [
     location: 'Hinjewadi',
     city: 'Pune, Maharashtra',
     category: 'Residential High-Rise',
-    image: '/empire-group-project-2560x1440.jpg',
+    image: '/vtp-monarque-ongoing.jpeg',
     builtUpArea: 'Details to be updated',
     floors: 'Details to be updated',
     scope: 'Civil construction and project execution',
@@ -58,7 +59,7 @@ export const ongoingProjectsData: OngoingProject[] = [
     location: 'Bundgarden',
     city: 'Pune, Maharashtra',
     category: 'Residential High-Rise',
-    image: '/empire-group-project-2560x1440.jpg',
+    image: '/lodha-lbg-ongoing.jpeg',
     builtUpArea: 'Details to be updated',
     floors: 'Details to be updated',
     scope: 'Civil construction and project execution',
@@ -75,7 +76,7 @@ export const ongoingProjectsData: OngoingProject[] = [
     location: 'NIBM',
     city: 'Pune, Maharashtra',
     category: 'Residential High-Rise',
-    image: '/empire-group-project-2560x1440.jpg',
+    image: '/lodha-nibm-ongoing.jpg',
     builtUpArea: 'Details to be updated',
     floors: 'Details to be updated',
     scope: 'Civil construction and project execution',
@@ -92,7 +93,8 @@ export const ongoingProjectsData: OngoingProject[] = [
     location: 'Manjri',
     city: 'Pune, Maharashtra',
     category: 'Residential High-Rise',
-    image: '/empire-group-project-2560x1440.jpg',
+    image: '/godrej-r8-ongoing.jpeg',
+    developerLogo: '/godrej-properties-logo.png',
     builtUpArea: 'Details to be updated',
     floors: 'Details to be updated',
     scope: 'Civil construction and project execution',
@@ -110,6 +112,7 @@ export const ongoingProjectsData: OngoingProject[] = [
     city: 'Pune, Maharashtra',
     category: 'Residential High-Rise',
     image: '/empire-group-project-2560x1440.jpg',
+    developerLogo: '/godrej-properties-logo.png',
     builtUpArea: 'Details to be updated',
     floors: 'Details to be updated',
     scope: 'Civil construction and project execution',
@@ -126,7 +129,8 @@ export const ongoingProjectsData: OngoingProject[] = [
     location: 'Keshavnagar',
     city: 'Pune, Maharashtra',
     category: 'Residential High-Rise',
-    image: '/empire-group-project-2560x1440.jpg',
+    image: '/godrej-aqua-vista-ongoing.jpg',
+    developerLogo: '/godrej-properties-logo.png',
     builtUpArea: 'Details to be updated',
     floors: 'Details to be updated',
     scope: 'Civil construction and project execution',
