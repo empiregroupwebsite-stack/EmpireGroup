@@ -1,0 +1,47 @@
+[
+  {
+    "id": "gujarat",
+    "name": "Gujarat",
+    "d": "M 78 470 L 112 458 L 136 470 L 126 500 L 105 512 L 82 506 L 70 488 Z"
+  },
+  {
+    "id": "rajasthan",
+    "name": "Rajasthan",
+    "d": "M 112 458 L 154 452 L 190 470 L 174 504 L 126 500 L 136 470 Z"
+  },
+  {
+    "id": "madhya-pradesh",
+    "name": "Madhya Pradesh",
+    "d": "M 174 504 L 190 470 L 232 478 L 248 510 L 220 532 L 188 524 Z"
+  },
+  {
+    "id": "maharashtra",
+    "name": "Maharashtra",
+    "d": "M 105 512 L 126 500 L 174 504 L 188 524 L 220 532 L 208 566 L 168 578 L 128 558 L 96 532 Z"
+  },
+  {
+    "id": "goa",
+    "name": "Goa",
+    "d": "M 128 558 L 168 578 L 156 590 L 132 584 Z"
+  },
+  {
+    "id": "karnataka",
+    "name": "Karnataka",
+    "d": "M 128 558 L 168 578 L 208 566 L 226 592 L 210 620 L 174 628 L 142 608 Z"
+  },
+  {
+    "id": "telangana",
+    "name": "Telangana",
+    "d": "M 220 532 L 248 510 L 286 520 L 304 548 L 286 576 L 248 570 L 208 566 Z"
+  },
+  {
+    "id": "andhra-pradesh",
+    "name": "Andhra Pradesh",
+    "d": "M 248 570 L 286 576 L 304 548 L 318 574 L 310 610 L 276 628 L 210 620 L 226 592 Z"
+  },
+  {
+    "id": "tamil-nadu",
+    "name": "Tamil Nadu",
+    "d": "M 210 620 L 276 628 L 310 610 L 292 650 L 256 664 L 224 646 Z"
+  }
+]

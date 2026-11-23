@@ -20,7 +20,7 @@ export function Projects({ onSelectProject, onViewAllProjects }: ProjectsProps) 
               Our Completed <em>Projects.</em>
             </h2>
             <p className="section-copy">
-              A distinguished portfolio of 23+ landmark developments delivered with India’s leading real estate builders. Every structure is engineered for endurance, seismic resilience, and architectural distinction.
+              A selected portfolio of landmark developments delivered with India’s leading real estate builders. Every structure is engineered for endurance, seismic resilience, and architectural distinction.
             </p>
           </div>
           <div className="projects-heading-right">
@@ -28,9 +28,9 @@ export function Projects({ onSelectProject, onViewAllProjects }: ProjectsProps) 
               type="button"
               className="button projects-view-all-cta"
               onClick={onViewAllProjects}
-              aria-label="View all 23+ completed projects on dedicated page"
+              aria-label="View all completed projects on dedicated page"
             >
-              Open Full Projects (23+) <span className="arrow">↗</span>
+              Open Full Projects <span className="arrow">↗</span>
             </button>
           </div>
         </div>
@@ -95,6 +95,17 @@ export function Projects({ onSelectProject, onViewAllProjects }: ProjectsProps) 
                   <span className="home-project-city">{project.city}</span>
                 </div>
 
+                <div className="home-project-specs">
+                  <div>
+                    <span>Completion Year</span>
+                    <strong>{project.year}</strong>
+                  </div>
+                  <div>
+                    <span>Project Area</span>
+                    <strong>{project.builtUpArea}</strong>
+                  </div>
+                </div>
+
                 <div className="home-project-card-footer">
                   <span className="home-project-detail-btn">
                     Explore Details <span className="arrow">↗</span>
@@ -113,7 +124,7 @@ export function Projects({ onSelectProject, onViewAllProjects }: ProjectsProps) 
           <div className="projects-footer-cta-box">
             <div className="cta-box-text">
               <h4>Want to see all our landmark developments?</h4>
-              <p>Explore all 23+ completed projects with full specifications, developer partnerships, and engineering highlights.</p>
+              <p>Explore completed projects with full specifications, developer partnerships, and engineering highlights.</p>
             </div>
             <div className="cta-box-buttons">
               <button
@@ -121,7 +132,7 @@ export function Projects({ onSelectProject, onViewAllProjects }: ProjectsProps) 
                 className="button projects-primary-more-btn"
                 onClick={onViewAllProjects}
               >
-                Open Full Projects (23 Projects) <span className="arrow">↗</span>
+                Open Full Projects <span className="arrow">↗</span>
               </button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 
 interface HeaderProps {
   isScrolled: boolean;
@@ -30,24 +30,10 @@ export function Header({
   onNavigateClients,
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [projectsDropdownOpen, setProjectsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   function closeMenu() {
     setMenuOpen(false);
-    setProjectsDropdownOpen(false);
   }
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setProjectsDropdownOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   // Prevent background scroll when mobile menu is open
   useEffect(() => {
@@ -117,7 +103,7 @@ export function Header({
           >
             <img
               className="brand-mark--full"
-              src="/Empire%20Group%20White%20Logo.png"
+              src="/Metallic%20Empire%20Group%20Logo.png"
               alt="Empire Group Construction & Infrastructure"
             />
           </a>
@@ -142,66 +128,32 @@ export function Header({
                 className={`nav-link ${currentView === 'about' ? 'is-active' : ''}`}
                 onClick={onNavigateAbout}
               >
-                About Us
+                About
+              
               </button>
 
-              {/* Realistic Projects Dropdown */}
-              <div
-                className={`nav-dropdown ${projectsDropdownOpen ? 'is-open' : ''}`}
-                ref={dropdownRef}
-                onMouseEnter={() => setProjectsDropdownOpen(true)}
-                onMouseLeave={() => setProjectsDropdownOpen(false)}
+              <button
+                type="button"
+                className={`nav-link ${currentView === 'all-projects' ? 'is-active' : ''}`}
+                onClick={onNavigateAllProjects}
               >
-                <button
-                  type="button"
-                  className={`nav-link nav-dropdown-btn ${
-                    currentView === 'all-projects' || currentView === 'ongoing-projects' ? 'is-active' : ''
-                  }`}
-                  onClick={() => setProjectsDropdownOpen(!projectsDropdownOpen)}
-                  aria-haspopup="true"
-                  aria-expanded={projectsDropdownOpen}
-                >
-                  <span>Projects</span>
-                  <svg className="dropdown-caret" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <path d="M1 1L5 5L9 1" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
+                Completed Projects
+              </button>
 
-                <div className="dropdown-menu" role="menu">
-                  <button
-                    type="button"
-                    className={`dropdown-item ${currentView === 'all-projects' ? 'is-active' : ''}`}
-                    onClick={() => {
-                      setProjectsDropdownOpen(false);
-                      onNavigateAllProjects();
-                    }}
-                    role="menuitem"
-                  >
-                    <div className="dropdown-item-title">Completed Projects</div>
-                    <div className="dropdown-item-desc">23+ Landmark Townships &amp; Skyscraper Handcovers</div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className={`dropdown-item ${currentView === 'ongoing-projects' ? 'is-active' : ''}`}
-                    onClick={() => {
-                      setProjectsDropdownOpen(false);
-                      onNavigateOngoingProjects();
-                    }}
-                    role="menuitem"
-                  >
-                    <div className="dropdown-item-title">Ongoing Projects</div>
-                    <div className="dropdown-item-desc">Active Mega-Sites, Progress &amp; Formwork Status</div>
-                  </button>
-                </div>
-              </div>
+              <button
+                type="button"
+                className={`nav-link ${currentView === 'ongoing-projects' ? 'is-active' : ''}`}
+                onClick={onNavigateOngoingProjects}
+              >
+                Ongoing Projects
+              </button>
 
               <button
                 type="button"
                 className={`nav-link ${currentView === 'equipments' ? 'is-active' : ''}`}
                 onClick={onNavigateEquipments}
               >
-                Equipments &amp; Fleet
+                Equipments
               </button>
 
               <button
@@ -214,7 +166,7 @@ export function Header({
 
               <button
                 type="button"
-                className="nav-link"
+                className={`nav-link ${currentView === 'clients' ? 'is-active' : ''}`}
                 onClick={onNavigateClients}
               >
                 Clients
@@ -230,7 +182,7 @@ export function Header({
 
               <button
                 type="button"
-                className="nav-link"
+                className={`nav-link ${currentView === 'contact' ? 'is-active' : ''}`}
                 onClick={onNavigateContact}
               >
                 Contact
@@ -247,7 +199,7 @@ export function Header({
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
-                <span>+91 90505 49861</span>
+                <span>+91 70070 12325</span>
               </a>
 
               <button
@@ -256,7 +208,7 @@ export function Header({
                 onClick={onNavigateContact}
               >
                 <span>Enquire Now</span>
-                <span className="arrow" aria-hidden="true">↗</span>
+                <span className="arrow" aria-hidden="true"></span>
               </button>
 
               {/* Mobile Hamburger Toggle */}
@@ -294,7 +246,7 @@ export function Header({
           {/* Header of Drawer */}
           <div className="mobile-drawer-header">
             <div className="mobile-drawer-brand">
-              <img src="/Empire%20Group%20White%20Logo.png" alt="Empire Group" />
+              <img src="/Metallic%20Empire%20Group%20Logo.png" alt="Empire Group" />
               <span>EMPIRE GROUP</span>
             </div>
             <button
@@ -303,14 +255,14 @@ export function Header({
               onClick={closeMenu}
               aria-label="Close menu"
             >
-              ✕
+              âœ•
             </button>
           </div>
 
           {/* Quick Call Button */}
           <div className="mobile-drawer-action-bar">
             <a href="tel:+919050549861" className="mobile-talk-pill">
-              📞 Direct Call: +91 90505 49861
+              ðŸ“ž Direct Call: +91 90505 49861
             </a>
           </div>
 
@@ -336,7 +288,7 @@ export function Header({
                 onNavigateAbout();
               }}
             >
-              About Us
+              About
             </button>
 
             <button
@@ -347,7 +299,7 @@ export function Header({
                 onNavigateAllProjects();
               }}
             >
-              Completed Projects (23+)
+              Completed Projects
             </button>
 
             <button
@@ -358,7 +310,7 @@ export function Header({
                 onNavigateOngoingProjects();
               }}
             >
-              Ongoing Projects (Active Sites)
+              Ongoing Projects
             </button>
 
             <button
@@ -385,7 +337,7 @@ export function Header({
 
             <button
               type="button"
-              className="mobile-nav-item"
+              className={`mobile-nav-item ${currentView === 'clients' ? 'is-active' : ''}`}
               onClick={() => {
                 closeMenu();
                 onNavigateClients();
@@ -407,7 +359,7 @@ export function Header({
 
             <button
               type="button"
-              className="mobile-nav-item"
+              className={`mobile-nav-item ${currentView === 'contact' ? 'is-active' : ''}`}
               onClick={() => {
                 closeMenu();
                 onNavigateContact();
@@ -427,16 +379,16 @@ export function Header({
                 onNavigateContact();
               }}
             >
-              Enquire Now <span className="arrow">↗</span>
+              Enquire Now <span className="arrow">â†—</span>
             </button>
 
             <div className="mobile-drawer-contact-card">
               <p className="contact-card-label">PUNE HEADQUARTERS</p>
               <a href="tel:+919050549861" className="contact-card-link">
-                📞 +91 90505 49861
+                ðŸ“ž +91 90505 49861
               </a>
               <a href="mailto:hr.empiregroup9@gmail.com" className="contact-card-link">
-                ✉ hr.empiregroup9@gmail.com
+                âœ‰ hr.empiregroup9@gmail.com
               </a>
               <p className="contact-card-address">
                 Mega Center, K Wing, North Hadapsar, Pune 411013

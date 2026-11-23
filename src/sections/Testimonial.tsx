@@ -14,7 +14,7 @@ export function Testimonial() {
           </p>
         </div>
         <span className="quote-count">
-          23+ <span style={{ opacity: 0.5 }}>Landmarks</span>
+          21 <span style={{ opacity: 0.5 }}>Landmarks</span>
         </span>
       </div>
     </section>

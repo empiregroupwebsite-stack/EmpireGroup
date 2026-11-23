@@ -13,31 +13,34 @@ export function About({ onNavigateAbout, onNavigateContact }: AboutSectionProps)
           <CityIllustration />
 
           <div className="about-stamp">
-            <strong>23+</strong>
-            <span>Projects Delivered on Time</span>
+            <strong>50+</strong>
+            <span>Projects Delivered</span>
           </div>
         </div>
 
         <div className="about-copy" data-reveal data-reveal-delay="1">
           <p className="eyebrow">The Empire Group Standard</p>
           <h2 className="section-heading" id="about-title">
-            Engineering Landmark Horizons. <em>Building Legacies.</em>
+            Driven by quality and excellence <em>since 2002.</em>
           </h2>
           <p className="section-copy">
-            With over two decades of specialized construction experience, Empire Group turns bold architectural blueprints into enduring landmarks across Pune and Western India. From super-tall residential towers and integrated townships to commercial IT SEZs, our integrated EPC capabilities unite cutting-edge formwork technology, rigorous seismic safety, and uncompromising delivery timelines.
+            Headquartered in Pune, Empire Group Infrastructure &amp; Developers is a client-focused construction company known for quality, safety, and timely execution. Our experienced civil engineering team delivers high-rise residential, commercial, township, and industrial projects across Maharashtra and India.
+          </p>
+          <p className="section-copy">
+            We follow the principles of quality, consistency, compliance, safety, and environmental responsibility across every project we undertake.
           </p>
           <div className="about-metrics-mini">
             <div className="mini-metric">
-              <strong>20+</strong>
-              <span>Years Experience</span>
+              <strong>25+</strong>
+              <span>Years in Industry</span>
             </div>
             <div className="mini-metric">
-              <strong>100%</strong>
-              <span>Safety Compliance</span>
+              <strong>50+</strong>
+              <span>Projects Completed</span>
             </div>
             <div className="mini-metric">
-              <strong>17+</strong>
-              <span>Tier-1 Developer Partners</span>
+              <strong>35M+</strong>
+              <span>Sq. Ft. Delivered</span>
             </div>
           </div>
 

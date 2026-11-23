@@ -117,6 +117,14 @@ export function ProjectDetailModal({
               <strong className="spec-value">{project.city}</strong>
             </div>
             <div className="spec-card">
+              <span className="spec-label">COMPLETION YEAR</span>
+              <strong className="spec-value">{project.year}</strong>
+            </div>
+            <div className="spec-card">
+              <span className="spec-label">TOTAL PROJECT AREA</span>
+              <strong className="spec-value">{project.builtUpArea}</strong>
+            </div>
+            <div className="spec-card">
               <span className="spec-label">STRUCTURAL HEIGHT</span>
               <strong className="spec-value">{project.floors}</strong>
             </div>

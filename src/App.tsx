@@ -11,11 +11,9 @@ import { EquipmentsPage } from './sections/EquipmentsPage';
 import { Footer } from './sections/Footer';
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
+import { Projects } from './sections/Projects';
 import { OngoingProjectsPage } from './sections/OngoingProjectsPage';
 import { ProjectDetailModal } from './sections/ProjectDetailModal';
-import { Projects } from './sections/Projects';
-import { Services } from './sections/Services';
-import { Testimonial } from './sections/Testimonial';
 import { completedProjectsData, type Project } from './data/projectsData';
 
 export type ViewState =
@@ -25,6 +23,8 @@ export type ViewState =
   | 'ongoing-projects'
   | 'equipments'
   | 'awards'
+  | 'clients'
+  | 'contact'
   | 'careers';
 
 export default function App() {
@@ -69,8 +69,14 @@ export default function App() {
       } else if (hash === '#careers') {
         setView('careers');
         setSelectedProject(null);
+      } else if (hash === '#clients') {
+        setView('clients');
+        setSelectedProject(null);
+      } else if (hash === '#contact') {
+        setView('contact');
+        setSelectedProject(null);
       } else {
-        const subPages = ['about', 'all-projects', 'ongoing-projects', 'equipments', 'awards', 'careers'];
+        const subPages = ['about', 'all-projects', 'ongoing-projects', 'equipments', 'awards', 'clients', 'contact', 'careers'];
         if (subPages.includes(view) && !subPages.map((p) => `#${p}`).includes(hash)) {
           setView('home');
         }
@@ -261,29 +267,17 @@ export default function App() {
   }
 
   function navigateToContact() {
-    if (view !== 'home') {
-      setView('home');
-    }
+    setView('contact');
+    setSelectedProject(null);
     window.location.hash = '#contact';
-    setTimeout(() => {
-      const el = document.querySelector('#contact');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function navigateToClients() {
-    if (view !== 'home') {
-      setView('home');
-    }
+    setView('clients');
+    setSelectedProject(null);
     window.location.hash = '#clients';
-    setTimeout(() => {
-      const el = document.querySelector('#clients');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function handleSelectProject(project: Project) {
@@ -314,10 +308,9 @@ export default function App() {
 
   function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const name = String(formData.get('name') ?? '');
+    const name = String(new FormData(event.currentTarget).get('name') ?? '');
     event.currentTarget.reset();
-    setContactStatus(`Thank you, ${name}. Your consultation request has been received. Our engineering team will contact you shortly.`);
+    setContactStatus(`Thank you, ${name}. Your consultation request has been received.`);
   }
 
   function handleNewsletterSubmit(event: FormEvent<HTMLFormElement>) {
@@ -348,11 +341,10 @@ export default function App() {
           onNavigateClients={navigateToClients}
         />
 
-        <main>
+        <main key={view} className="page-route page-route--enter">
           {view === 'home' ? (
             <>
               <Hero />
-              <Clients />
               <Projects
                 onSelectProject={handleSelectProject}
                 onViewAllProjects={navigateToAllProjects}
@@ -361,9 +353,6 @@ export default function App() {
                 onNavigateAbout={navigateToAbout}
                 onNavigateContact={navigateToContact}
               />
-              <Services />
-              <Testimonial />
-              <Contact onSubmit={handleContactSubmit} status={contactStatus} />
             </>
           ) : view === 'about' ? (
             <AboutPage
@@ -387,6 +376,10 @@ export default function App() {
             />
           ) : view === 'careers' ? (
             <CareerPage onNavigateHome={navigateToHome} />
+          ) : view === 'clients' ? (
+            <Clients />
+          ) : view === 'contact' ? (
+            <Contact onSubmit={handleContactSubmit} status={contactStatus} />
           ) : (
             <AllProjectsPage
               onSelectProject={handleSelectProject}
@@ -422,7 +415,7 @@ export default function App() {
           <div className="logo-splash-lockup">
             <img
               ref={introLogoImgRef}
-              src="/Empire%20Group%20White%20Logo.png"
+              src="/Metallic%20Empire%20Group%20Logo.png"
               alt="Empire Group"
             />
           </div>

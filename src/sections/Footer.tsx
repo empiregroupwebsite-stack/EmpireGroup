@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+﻿import { useState, type FormEvent } from 'react';
 import { LegalModal, type LegalTab } from './LegalModal';
 
 interface FooterProps {
@@ -45,18 +45,15 @@ export function Footer({
                 }}
               >
                 <img
-                  src="/Empire%20Group%20White%20Logo.png"
+                  src="/Metallic%20Empire%20Group%20Logo.png"
                   alt="Empire Group Construction &amp; Developers"
                   className="footer-centered-logo"
                 />
               </a>
               <div className="footer-brand-text-content">
-                <h2 className="footer-tagline">EMPIRE GROUP</h2>
+                <h2 className="footer-tagline">EMPIREGROUP</h2>
                 <p className="footer-subtagline">
-                  ENGINEERING EXCELLENCE · BUILDING LEGACIES
-                </p>
-                <p className="footer-mission-text">
-                  Premier EPC Infrastructure &amp; Construction Partners to India&apos;s Foremost Real Estate Developers. Delivering landmark high-rises, commercial hubs, and integrated townships with uncompromising safety and structural precision.
+                  ENGINEERING EXCELLENCE BUILDING LEGACIES
                 </p>
               </div>
             </div>
@@ -67,9 +64,6 @@ export function Footer({
                 <label htmlFor="newsletter-email" className="footer-newsletter-label">
                   Stay Connected With Empire Developments
                 </label>
-                <p className="footer-newsletter-desc">
-                  Subscribe for periodic project milestones, engineering insights, and new project launches.
-                </p>
                 <div className="footer-newsletter-bar">
                   <input
                     id="newsletter-email"
@@ -86,7 +80,7 @@ export function Footer({
                     aria-label="Subscribe to Empire Group newsletter"
                   >
                     <span>Subscribe</span>
-                    <span className="arrow" aria-hidden="true">↗</span>
+                    <span className="arrow" aria-hidden="true"></span>
                   </button>
                 </div>
                 {status && <p className="newsletter-status" role="status">{status}</p>}
@@ -144,11 +138,11 @@ export function Footer({
             <div className="footer-map-container" aria-label="Empire Group Headquarters Google Map Location">
               <div className="footer-map-header">
                 <div className="map-header-title">
-                  <span className="map-pin-icon" aria-hidden="true">📍</span>
+                  <span className="map-pin-icon" aria-hidden="true"></span>
                   <div>
                     <strong className="map-title-text">Corporate Headquarters Location</strong>
                     <p className="map-subtitle-address">
-                      Mega Center, K Wing, 601–604, 5th Floor, Near Noble Hospital, North Hadapsar, Pune, Maharashtra 411013
+                      Mega Center, K Wing, 601 To 604, 5th Floor, Near Noble Hospital, North Hadapsar, Pune, Maharashtra 411013
                     </p>
                   </div>
                 </div>
@@ -160,7 +154,7 @@ export function Footer({
                   title="Open Empire Group Headquarters in Google Maps"
                 >
                   <span>Open in Google Maps</span>
-                  <span className="arrow" aria-hidden="true">↗</span>
+                  <span className="arrow" aria-hidden="true"></span>
                 </a>
               </div>
 
@@ -179,19 +173,19 @@ export function Footer({
 
               <div className="footer-map-contact-bar">
                 <div className="map-contact-chip">
-                  <span className="chip-icon">📞</span>
+                  <span className="chip-icon"></span>
                   <span>
                     Direct: <a href="tel:+919050549861">+91 90505 49861</a> &middot; <a href="tel:02026890191">020 2689 0191</a>
                   </span>
                 </div>
                 <div className="map-contact-chip">
-                  <span className="chip-icon">✉</span>
+                  <span className="chip-icon"></span>
                   <span>
                     Email: <a href="mailto:hr.empiregroup9@gmail.com">hr.empiregroup9@gmail.com</a>
                   </span>
                 </div>
                 <div className="map-contact-chip">
-                  <span className="chip-icon">🕒</span>
+                  <span className="chip-icon"></span>
                   <span>Mon &ndash; Sat: 9:30 AM &ndash; 6:30 PM IST</span>
                 </div>
               </div>
@@ -241,9 +235,6 @@ export function Footer({
               Safety &amp; ISO Certification
             </button>
           </div>
-          <p className="footer-sub-notice">
-            Pune &amp; Maharashtra Real Estate &amp; Structural Contracting Specialists.
-          </p>
         </div>
       </div>
 
