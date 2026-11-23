@@ -26,20 +26,9 @@ export function OngoingProjectsPage(_props: OngoingProjectsPageProps) {
               <dl>
                 <div>
                   <dt>Client</dt>
-<<<<<<< Updated upstream
                   <dd className="simple-project-client">
                     <DeveloperLogo developer={project.developer} />
                     {project.developer}
-=======
-                  <dd>
-                    {project.developerLogo ? (
-                      <img
-                        className="simple-project-developer-logo"
-                        src={project.developerLogo}
-                        alt={`${project.developer} logo`}
-                      />
-                    ) : project.developer}
->>>>>>> Stashed changes
                   </dd>
                 </div>
                 <div>
