@@ -12,8 +12,7 @@ export interface MachineryItem {
   name: string;
   use: string;
   image: string;
-  /** Photo credit; these photos come from Wikimedia Commons and their licences require attribution. */
-  credit: string;
+  credit?: string;
 }
 
 // Ordered by priority on site: lifting and concreting first, support tools last.
@@ -66,7 +65,7 @@ export const equipmentsData: EquipmentItem[] = [
   },
 ];
 
-// Photos: Wikimedia Commons, cropped. Replace with your own site photos when available.
+// Include credit for externally sourced photos when required.
 export const machineryData: MachineryItem[] = [
   {
     id: 'boom-placer',
@@ -86,14 +85,12 @@ export const machineryData: MachineryItem[] = [
     id: 'tractor',
     name: 'Tractor',
     use: 'Site haulage',
-    image: '/machinery/tractor.jpg',
-    credit: 'Photo: Ganesh Mohan T, CC BY-SA 4.0, via Wikimedia Commons',
+    image: '/machinery/mahindra-tractor-117.jpg',
   },
   {
     id: 'tempo',
     name: 'Tempo',
     use: 'Material transport',
     image: '/machinery/tempo.jpg',
-    credit: 'Photo: SnapMeUp, CC BY-SA 4.0, via Wikimedia Commons',
   },
 ];

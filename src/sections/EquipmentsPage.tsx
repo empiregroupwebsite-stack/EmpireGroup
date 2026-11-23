@@ -1,6 +1,10 @@
 import { equipmentsData, machineryData } from '../data/equipmentsData';
 
 const pad = (value: number) => String(value).padStart(2, '0');
+const machineryCredits = machineryData
+  .map((item) => item.credit)
+  .filter((credit): credit is string => Boolean(credit))
+  .map((credit) => credit.replace('Photo: ', '').replace(', via Wikimedia Commons', ''));
 
 export function EquipmentsPage() {
   return (
@@ -56,10 +60,11 @@ export function EquipmentsPage() {
               </li>
             ))}
           </ul>
-          <p className="efleet__credits">
-            Machinery photos via Wikimedia Commons:{' '}
-            {machineryData.map((item) => item.credit.replace('Photo: ', '').replace(', via Wikimedia Commons', '')).join(' · ')}
-          </p>
+          {machineryCredits.length > 0 && (
+            <p className="efleet__credits">
+              Machinery photo credits: {machineryCredits.join(' · ')}
+            </p>
+          )}
         </div>
       </div>
     </section>

@@ -160,7 +160,7 @@ export const ongoingProjectsData: OngoingProject[] = [
   {
     id: 'euphoria',
     name: 'Euphoria',
-    developer: 'Details to be updated',
+    developer: 'VTP Realty',
     location: 'Details to be updated',
     city: 'India',
     category: 'Residential High-Rise',
